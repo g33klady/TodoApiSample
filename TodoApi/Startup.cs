@@ -32,17 +32,7 @@ namespace TodoApi
                     document.Info.Title = "ToDo API";
                     document.Info.Description = "A simple ASP.NET Core web API";
                     document.Info.TermsOfService = "None";
-                    document.Info.Contact = new NSwag.SwaggerContact
-                    {
-                        Name = "Hilary Weaver-Robb",
-                        Email = string.Empty,
-                        Url = "https://twitter.com/g33klady"
-                    };
-                    document.Info.License = new NSwag.SwaggerLicense
-                    {
-                        Name = "Use under LICX",
-                        Url = "https://example.com/license"
-                    };
+
                 };
             });
 

@@ -40,7 +40,7 @@ namespace TodoApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(TodoItem item)
+        public IActionResult Create([FromBody]TodoItem item)
         {
             _context.TodoItems.Add(item);
             _context.SaveChanges();
@@ -49,7 +49,7 @@ namespace TodoApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(long id, TodoItem item)
+        public IActionResult Update(long id, [FromBody]TodoItem item)
         {
             var todo = _context.TodoItems.Find(id);
             if (todo == null)
