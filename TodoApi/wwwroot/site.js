@@ -29,6 +29,7 @@ function getData() {
 
                 $('<tr><td><input disabled="true" type="checkbox" ' + checked + '></td>' +
                     '<td>' + item.name + '</td>' +
+                    '<td>' + item.dateDue + '</td>' +
                     '<td><button onclick="editItem(' + item.id + ')">Edit</button></td>' +
                     '<td><button onclick="deleteItem(' + item.id + ')">Delete</button></td>' +
                     '</tr>').appendTo($('#todos'));
@@ -42,7 +43,8 @@ function getData() {
 function addItem() {
     const item = {
         'name': $('#add-name').val(),
-        'isComplete': false
+        'isComplete': false,
+        'dateDue': $('#add-date').val()
     };
 
     $.ajax({
@@ -56,7 +58,7 @@ function addItem() {
         },
         success: function (result) {
             getData();
-            $('#add-name').val('');
+            $('#add-name').val(''), $('#add-dateDue').val('');
         }
     });
 }
@@ -77,6 +79,7 @@ function editItem(id) {
             $('#edit-name').val(item.name);
             $('#edit-id').val(item.id);
             $('#edit-isComplete').val(item.isComplete);
+            $('#edit-date').val(item.dateDue);
         }
     });
     $('#spoiler').css({ 'display': 'block' });
@@ -86,7 +89,8 @@ $('.my-form').on('submit', function () {
     const item = {
         'name': $('#edit-name').val(),
         'isComplete': $('#edit-isComplete').is(':checked'),
-        'id': $('#edit-id').val()
+        'id': $('#edit-id').val(),
+        'dateDue': $('#edit-date').val()
     };
 
     $.ajax({
