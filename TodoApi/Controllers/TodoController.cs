@@ -15,12 +15,11 @@ namespace TodoApi.Controllers
         public TodoController(TodoContext context)
         {
             _context = context;
-
-            //if (_context.TodoItems.Count() == 0)
-            //{
-            //    _context.TodoItems.Add(new TodoItem { Name = "Item1" });
-            //    _context.SaveChanges();
-            //}
+            //comment this out if you don't want the default todo items populating on launch
+            if (_context.TodoItems.Count() == 0)
+            {
+                InsertBaseTodoItems(_context);
+            }
         }
 
         [HttpGet]
@@ -131,6 +130,15 @@ namespace TodoApi.Controllers
             {
                 return true; //item.datedue is today or in the future
             }
+        }
+
+        public void InsertBaseTodoItems(TodoContext context)
+        {
+            //some base items to have in our todo list on launch so it's not empty
+            context.TodoItems.Add(new TodoItem { Name = "Walk the dog", DateDue = new DateTime(2019, 12, 31) });
+            context.TodoItems.Add(new TodoItem { Name = "Feed the dog", DateDue = new DateTime(2019, 12, 30) });
+            context.TodoItems.Add(new TodoItem { Name = "Walk the cat", DateDue = new DateTime(2019, 12, 29) });
+            context.SaveChanges();
         }
     }
 }
