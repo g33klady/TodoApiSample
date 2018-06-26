@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TodoApi.Models;
 
@@ -94,6 +95,37 @@ namespace TodoApiTests
             Assert.AreEqual(expItem.Name, getRespItem.Name, "Item Names are not the same, expected " + expItem.Name + " but got " + getRespItem.Name);
             Assert.AreEqual(expItem.DateDue, getRespItem.DateDue, "Item DateDue are not the same, expected " + expItem.DateDue + " but got " + getRespItem.DateDue);
             Assert.AreEqual(expItem.IsComplete, getRespItem.IsComplete, "Item IsComplete are not the same, expected " + expItem.IsComplete + " but got " + getRespItem.IsComplete);
+        }
+
+        //we need to tell NUnit where to get the test data
+        [Test, TestCaseSource(typeof(TodoItemTestData), "NameBoundaryTestCases")]
+        public string PostTodoItemNameBoundaryTests(string name)
+        {
+            //Arrange
+            var reqBody = JsonConvert.SerializeObject(new TodoItem { Name = name });
+
+            //Act
+            var response = Utilities.SendHttpWebRequest(_baseUrl, "POST", reqBody);
+
+            //Assert
+            return response.StatusCode.ToString();
+        }
+
+    }
+
+    public class TodoItemTestData
+    {
+        public static IEnumerable NameBoundaryTestCases
+        {
+            get
+            {
+                //each item defines 1. the data to use in the test and 2. what to expect as the result
+                //TestCaseData(1).Returns(2);
+                yield return new TestCaseData("").Returns("BadRequest"); //0 character name
+                yield return new TestCaseData("cjMJeYBj4Z").Returns("Created"); //10 character name
+                yield return new TestCaseData("QhRMNNv6MNY6qW8GAWm5sFCDHbETIeP4evlKopK3HRgF9RSbUlPTFBmk78vLYwLLe5rEwEJkkbSu8m9RDlKVLvIGO1eIOdoWUm1E84dEDXcSu87mLGEdL2c0vWu7r5j6R4MvG3kUSp5e8eaGy9GoSCfBnTgrp6dx4f5XMQxuPRxj54dS20ybYkWXmnN29xbDik5vuOvmGs0SQHh9WGJvFJisWZnC8h7KZIKjy2Xp0k3de2VsNsB6jFFKsIwI18J").Returns("Created"); //255 character name
+                yield return new TestCaseData("QhRMNNv6MNY6qW8GAWm5sFCDHbETIeP4evlKopK3HRgF9RSbUlPTFBmk78vLYwLLe5rEwEJkkbSu8m9RDlKVLvIGO1eIOdoWUm1E84dEDXcSu87mLGEdL2c0vWu7r5j6R4MvG3kUSp5e8eaGy9GoSCfBnTgrp6dx4f5XMQxuPRxj54dS20ybYkWXmnN29xbDik5vuOvmGs0SQHh9WGJvFJisWZnC8h7KZIKjy2Xp0k3de2VsNsB6jFFKsIwI18J1").Returns("BadRequest"); //256 character name
+            }
         }
     }
 }
