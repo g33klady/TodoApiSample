@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using NUnit.Framework;
+using System.Collections.Generic;
 using TodoApi.Models;
 
 
@@ -46,6 +47,22 @@ namespace TodoApiTests
 
             //Assert
             Assert.AreEqual(expectedName, actualTodo.Name, "Expected and actual names are different. Expected " + expectedName + " but was " + actualTodo.Name);
+        }
+
+        [Test]
+        public void VerifyGetTodoItemsReturns3Items()
+        {
+            //Arrange
+            int expectedCount = 3;
+
+            //Act
+            var response = Utilities.SendHttpWebRequest(_baseUrl, "GET");
+            var respString = Utilities.ReadWebResponse(response);
+
+            List<TodoItem> todoList = JsonConvert.DeserializeObject<List<TodoItem>>(respString); //we're doing a get of all items, so we'll have a List of TodoItem objects to deal with
+
+            //Assert
+            Assert.IsTrue(todoList.Count == expectedCount, "Actual count was not " + expectedCount + " it was " + todoList.Count);
         }
     }
 }
