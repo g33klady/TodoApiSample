@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Text;
 
-namespace TodoApi.Tests
+namespace TodoApiTests
 {
     public static class Utilities
     {
