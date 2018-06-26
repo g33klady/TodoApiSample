@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using TodoApi.Models;
 
@@ -63,6 +64,36 @@ namespace TodoApiTests
 
             //Assert
             Assert.IsTrue(todoList.Count == expectedCount, "Actual count was not " + expectedCount + " it was " + todoList.Count);
+        }
+
+        [Test]
+        public void VerifyPostingTodoItemPostsTheItem()
+        {
+            //Arrange
+            TodoItem expItem = new TodoItem
+            {
+                Name = "mow the lawn",
+                DateDue = new DateTime(2019, 12, 31),
+                IsComplete = false
+            };
+            var reqBody = JsonConvert.SerializeObject(expItem); //we need to turn this object into a JSON string
+
+            //Act
+            //first we need to do the POST action, and get the new object's ID
+            var postResponse = Utilities.SendHttpWebRequest(_baseUrl, "POST", reqBody);
+            var postRespString = Utilities.ReadWebResponse(postResponse);
+            TodoItem postRespItem = JsonConvert.DeserializeObject<TodoItem>(postRespString);
+            var newItemId = postRespItem.Id; //we need the ID to do the GET request of this item
+
+            //now we need to do the GET action, using the new object's ID
+            var getResponse = Utilities.SendHttpWebRequest(_baseUrl + newItemId, "GET");
+            var getRespString = Utilities.ReadWebResponse(getResponse);
+            TodoItem getRespItem = JsonConvert.DeserializeObject<TodoItem>(getRespString);
+
+            //Assert
+            Assert.AreEqual(expItem.Name, getRespItem.Name, "Item Names are not the same, expected " + expItem.Name + " but got " + getRespItem.Name);
+            Assert.AreEqual(expItem.DateDue, getRespItem.DateDue, "Item DateDue are not the same, expected " + expItem.DateDue + " but got " + getRespItem.DateDue);
+            Assert.AreEqual(expItem.IsComplete, getRespItem.IsComplete, "Item IsComplete are not the same, expected " + expItem.IsComplete + " but got " + getRespItem.IsComplete);
         }
     }
 }
