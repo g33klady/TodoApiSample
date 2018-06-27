@@ -18,7 +18,7 @@ namespace TodoApi.Controllers
             //comment this out if you don't want the default todo items populating on launch
             if (_context.TodoItems.Count() == 0)
             {
-                InsertBaseTodoItems(_context);
+                Utils.InsertBaseTodoItems(_context);
             }
         }
 
@@ -54,11 +54,11 @@ namespace TodoApi.Controllers
         [HttpPost]
         public IActionResult Create([FromBody]TodoItem item)
         {
-            if(!IsItemNameValid(item))
+            if (!Utils.IsItemNameValid(item))
             {
                 return BadRequest("Name is required and must be 1-255 chars long.");
             }
-            if(!IsItemDateValid(item))
+            if (!Utils.IsItemDateValid(item))
             {
                 return BadRequest("Date must be valid and in the future.");
             }
@@ -101,44 +101,6 @@ namespace TodoApi.Controllers
             _context.TodoItems.Remove(todo);
             _context.SaveChanges();
             return NoContent();
-        }
-
-        public bool IsItemNameValid(TodoItem item)
-        {
-            var name = item.Name;
-            if(name == null || name.Length > 255 || name.Length < 1)
-            {
-                return false;
-            }
-            return true;
-        }
-
-        public bool IsItemDateValid(TodoItem item)
-        {
-           var date = item.DateDue;
-           if (date == DateTime.MinValue)
-            {
-                return true;
-            }
-           DateTime today = DateTime.Today;
-           var diff = DateTime.Compare(date, today);
-           if(diff < 0)
-            {
-                return false; //item.datedue is in the past
-            }
-           else
-            {
-                return true; //item.datedue is today or in the future
-            }
-        }
-
-        public void InsertBaseTodoItems(TodoContext context)
-        {
-            //some base items to have in our todo list on launch so it's not empty
-            context.TodoItems.Add(new TodoItem { Name = "Walk the dog", DateDue = new DateTime(2019, 12, 31) });
-            context.TodoItems.Add(new TodoItem { Name = "Feed the dog", DateDue = new DateTime(2019, 12, 30) });
-            context.TodoItems.Add(new TodoItem { Name = "Walk the cat", DateDue = new DateTime(2019, 12, 29) });
-            context.SaveChanges();
         }
     }
 }

@@ -78,7 +78,7 @@ function editItem(id) {
             $('#edit-name').val(item.name);
             $('#edit-id').val(item.id);
             $('#edit-isComplete').val(item.isComplete);
-            $('#edit-date').val(item.dateDue);
+            $('#edit-date').val(item.dateDue.substring(0,10));
         }
     });
     $('#spoiler').css({ 'display': 'block' });
