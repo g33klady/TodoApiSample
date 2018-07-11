@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using RestSharp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,13 +24,14 @@ namespace TodoApiTests
         public void VerifyGetReturns200Ok()
         {
             //Arrange
-            //nothing to arrange
+            var client = new RestClient(_baseUrl);
+            var request = new RestRequest(Method.GET);
 
             //Act
-            var response = Utilities.SendHttpWebRequest(_baseUrl, "GET");
+            IRestResponse response = client.Execute(request);
 
             //Assert
-            Assert.IsTrue(response.IsSuccessStatusCode, "Get method did not return a success status code; it returned " + response.StatusCode);
+            Assert.IsTrue(response.IsSuccessful, "Get method did not return a success status code; it returned " + response.StatusCode);
         }
 
         [Test]
@@ -38,33 +39,29 @@ namespace TodoApiTests
         {
             //Arrange
             var expectedName = "Walk the dog"; //we know this is what it should be from the Controller constructor
-
-            var url = _baseUrl + "1"; //so our URL looks like https://localhost:44350/api/Todo/1
+            var client = new RestClient(_baseUrl);
+            var request = new RestRequest("1", Method.GET); //so our URL looks like https://localhost:44350/api/Todo/1
 
             //Act
-            var response = Utilities.SendHttpWebRequest(url, "GET"); //get the full response
-            var respString = Utilities.ReadWebResponse(response); //get just the response body
-
-            TodoItem actualTodo = JsonConvert.DeserializeObject<TodoItem>(respString); //deserialize the body string into the TodoItem object
+            IRestResponse<TodoItem> actualTodo = client.Execute<TodoItem>(request);
 
             //Assert
-            Assert.AreEqual(expectedName, actualTodo.Name, "Expected and actual names are different. Expected " + expectedName + " but was " + actualTodo.Name);
+            Assert.AreEqual(expectedName, actualTodo.Data.Name, "Expected and actual names are different. Expected " + expectedName + " but was " + actualTodo.Data.Name);
         }
 
         [Test]
-        public void VerifyGetTodoItemsReturns3Items()
+        public void VerifyGetTodoItemsReturns3Items() //this is a bad test - the count is different depending on the sequence of tests!
         {
             //Arrange
             int expectedCount = 3;
+            var client = new RestClient(_baseUrl);
+            var request = new RestRequest(Method.GET);
 
             //Act
-            var response = Utilities.SendHttpWebRequest(_baseUrl, "GET");
-            var respString = Utilities.ReadWebResponse(response);
-
-            List<TodoItem> todoList = JsonConvert.DeserializeObject<List<TodoItem>>(respString); //we're doing a get of all items, so we'll have a List of TodoItem objects to deal with
+            IRestResponse<List<TodoItem>> todoList = client.Execute<List<TodoItem>>(request); //we're doing a get of all items, so we'll have a List of TodoItem objects to deal with
 
             //Assert
-            Assert.IsTrue(todoList.Count == expectedCount, "Actual count was not " + expectedCount + " it was " + todoList.Count);
+            Assert.IsTrue(todoList.Data.Count == expectedCount, "Actual count was not " + expectedCount + " it was " + todoList.Data.Count);
         }
 
         [Test]
@@ -74,27 +71,27 @@ namespace TodoApiTests
             TodoItem expItem = new TodoItem
             {
                 Name = "mow the lawn",
-                DateDue = new DateTime(2019, 12, 31),
+                DateDue = new DateTime(2019, 12, 31, 00, 00, 00),
                 IsComplete = false
             };
-            var reqBody = JsonConvert.SerializeObject(expItem); //we need to turn this object into a JSON string
+            var client = new RestClient(_baseUrl);
+            var postRequest = new RestRequest(Method.POST);
+            postRequest.RequestFormat = DataFormat.Json;
+            postRequest.AddJsonBody(expItem);
 
             //Act
             //first we need to do the POST action, and get the new object's ID
-            var postResponse = Utilities.SendHttpWebRequest(_baseUrl, "POST", reqBody);
-            var postRespString = Utilities.ReadWebResponse(postResponse);
-            TodoItem postRespItem = JsonConvert.DeserializeObject<TodoItem>(postRespString);
-            var newItemId = postRespItem.Id; //we need the ID to do the GET request of this item
+            IRestResponse<TodoItem> postTodo = client.Execute<TodoItem>(postRequest);
+            var newItemId = postTodo.Data.Id; //we need the ID to do the GET request of this item
 
             //now we need to do the GET action, using the new object's ID
-            var getResponse = Utilities.SendHttpWebRequest(_baseUrl + newItemId, "GET");
-            var getRespString = Utilities.ReadWebResponse(getResponse);
-            TodoItem getRespItem = JsonConvert.DeserializeObject<TodoItem>(getRespString);
+            var getRequest = new RestRequest(newItemId.ToString(), Method.GET);
+            IRestResponse<TodoItem> getTodo = client.Execute<TodoItem>(getRequest);
 
             //Assert
-            Assert.AreEqual(expItem.Name, getRespItem.Name, "Item Names are not the same, expected " + expItem.Name + " but got " + getRespItem.Name);
-            Assert.AreEqual(expItem.DateDue, getRespItem.DateDue, "Item DateDue are not the same, expected " + expItem.DateDue + " but got " + getRespItem.DateDue);
-            Assert.AreEqual(expItem.IsComplete, getRespItem.IsComplete, "Item IsComplete are not the same, expected " + expItem.IsComplete + " but got " + getRespItem.IsComplete);
+            Assert.AreEqual(expItem.Name, getTodo.Data.Name, "Item Names are not the same, expected " + expItem.Name + " but got " + getTodo.Data.Name);
+            Assert.AreEqual(expItem.DateDue, getTodo.Data.DateDue, "Item DateDue are not the same, expected " + expItem.DateDue + " but got " + getTodo.Data.DateDue);
+            Assert.AreEqual(expItem.IsComplete, getTodo.Data.IsComplete, "Item IsComplete are not the same, expected " + expItem.IsComplete + " but got " + getTodo.Data.IsComplete);
         }
 
         //we need to tell NUnit where to get the test data
@@ -102,10 +99,18 @@ namespace TodoApiTests
         public string PostTodoItemNameBoundaryTests(string name)
         {
             //Arrange
-            var reqBody = JsonConvert.SerializeObject(new TodoItem { Name = name });
+            TodoItem postItem = new TodoItem
+            {
+                Name = name,
+                DateDue = new DateTime(2019, 12, 31)
+            };
+            var client = new RestClient(_baseUrl);
+            var postRequest = new RestRequest(Method.POST);
+            postRequest.RequestFormat = DataFormat.Json;
+            postRequest.AddJsonBody(postItem);
 
             //Act
-            var response = Utilities.SendHttpWebRequest(_baseUrl, "POST", reqBody);
+            IRestResponse<TodoItem> response = client.Execute<TodoItem>(postRequest);
 
             //Assert
             return response.StatusCode.ToString();

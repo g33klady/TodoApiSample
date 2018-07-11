@@ -58,10 +58,15 @@ namespace TodoApi.Controllers
             {
                 return BadRequest("Name is required and must be 1-255 chars long.");
             }
-            if (!Utils.IsItemDateValid(item))
+            if (item.DateDue != null)
             {
-                return BadRequest("Date must be valid and in the future.");
+                if (!Utils.IsItemDateValid(item))
+                {
+                    return BadRequest("Date must be valid and in the future.");
+                }
+                item.DateDue = item.DateDue.Date;
             }
+            
             _context.TodoItems.Add(item);
             _context.SaveChanges();
 
