@@ -71,7 +71,7 @@ namespace TodoApiTests
             TodoItem expItem = new TodoItem
             {
                 Name = "mow the lawn",
-                DateDue = new DateTime(2019, 12, 31, 00, 00, 00),
+                DateDue = new DateTime(2019, 12, 31),
                 IsComplete = false
             };
             var client = new RestClient(_baseUrl);
