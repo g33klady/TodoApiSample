@@ -50,7 +50,7 @@ namespace TodoApiTests
         }
 
         [Test]
-        public void VerifyGetTodoItemsReturns3Items()
+        public void VerifyGetTodoItemsReturns3Items() //the results of this will change depending on execution order of tests. THIS IS A BAD TEST!
         {
             //Arrange
             int expectedCount = 3;
