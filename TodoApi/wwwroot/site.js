@@ -1,5 +1,6 @@
 ﻿const uri = 'api/todo';
 let todos = null;
+
 function getCount(data) {
     const el = $('#counter');
     let name = 'to-do';
@@ -14,6 +15,12 @@ function getCount(data) {
 }
 
 $(document).ready(function () {
+    if (Cookies.get('CanAccess' === 'undefined')) {
+        // do your stuff
+
+        // set cookie now
+        Cookies.set('CanAccess', 'true', { expires: 7 });
+    }
     getData();
 });
 
@@ -21,6 +28,9 @@ function getData() {
     $.ajax({
         type: 'GET',
         url: uri,
+        beforeSend: function (request) {
+            request.setRequestHeader("CanAccess", "true");
+        },
         success: function (data) {
             $('#todos').empty();
             getCount(data.length);
@@ -51,6 +61,9 @@ function addItem() {
         accepts: 'application/json',
         url: uri,
         contentType: 'application/json',
+        beforeSend: function (request) {
+            request.setRequestHeader("CanAccess", "true");
+        },
         data: JSON.stringify(item),
         error: function (jqXHR, textStatus, errorThrown) {
             alert('here');
@@ -65,6 +78,9 @@ function addItem() {
 function deleteItem(id) {
     $.ajax({
         url: uri + '/' + id,
+        beforeSend: function (request) {
+            request.setRequestHeader("CanAccess", "true");
+        },
         type: 'DELETE',
         success: function (result) {
             getData();
@@ -94,6 +110,9 @@ $('.my-form').on('submit', function () {
 
     $.ajax({
         url: uri + '/' + $('#edit-id').val(),
+        beforeSend: function (request) {
+            request.setRequestHeader("CanAccess", "true");
+        },
         type: 'PUT',
         accepts: 'application/json',
         contentType: 'application/json',

@@ -25,6 +25,10 @@ namespace TodoApi.Controllers
         [HttpGet]
         public ActionResult<List<TodoItem>> GetAll()
         {
+            if (!Utils.CanAccess(Request.Headers))
+            {
+                return Unauthorized();
+            }
             return _context.TodoItems.ToList();
         }
 
@@ -43,6 +47,10 @@ namespace TodoApi.Controllers
         [HttpGet("{id}", Name = "GetTodo")]
         public ActionResult<TodoItem> GetById(long id)
         {
+            if (!Utils.CanAccess(Request.Headers))
+            {
+                return Unauthorized();
+            }
             var item = _context.TodoItems.Find(id);
             if (item == null)
             {
@@ -54,6 +62,10 @@ namespace TodoApi.Controllers
         [HttpPost]
         public IActionResult Create([FromBody]TodoItem item)
         {
+            if (!Utils.CanAccess(Request.Headers))
+            {
+                return Unauthorized();
+            }
             if (!Utils.IsItemNameValid(item))
             {
                 return BadRequest("Name is required and must be 1-255 chars long.");
@@ -76,6 +88,10 @@ namespace TodoApi.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(long id, [FromBody]TodoItem item)
         {
+            if (!Utils.CanAccess(Request.Headers))
+            {
+                return Unauthorized();
+            }
             var todo = _context.TodoItems.Find(id);
             if (todo == null)
             {
@@ -97,6 +113,10 @@ namespace TodoApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {
+            if (!Utils.CanAccess(Request.Headers))
+            {
+                return Unauthorized();
+            }
             var todo = _context.TodoItems.Find(id);
             if (todo == null)
             {
