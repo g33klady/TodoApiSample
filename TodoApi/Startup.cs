@@ -3,12 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TodoApi.Models;
-using NSwag.AspNetCore;
 using System.Reflection;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using TodoApi.Filters;
-using NSwag.SwaggerGeneration.Processors.Security;
-using NSwag;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Collections.Generic;
 
 namespace TodoApi
 {
@@ -20,8 +18,21 @@ namespace TodoApi
                 opt.UseInMemoryDatabase("TodoList"));
             services.AddMvc()
                     .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-                    
 
+            services.AddSwaggerGen(c =>
+            {
+                c.AddSecurityDefinition("CanAccess", new ApiKeyScheme
+                {
+                    Type = "apiKey",
+                    In = "header",
+                    Name = "CanAccess"
+                });
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+                {
+                    { "CanAccess", new string[] {} }
+                });
+                c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Todo API", Version = "v1" });
+            });
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
@@ -34,33 +45,11 @@ namespace TodoApi
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseAuthentication();
-            app.UseSwaggerUi3(typeof(Startup).GetTypeInfo().Assembly, settings =>
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
             {
-                settings.GeneratorSettings.IsAspNetCore = true;
-                settings.GeneratorSettings.OperationProcessors.Add(new OperationSecurityScopeProcessor("custom-auth"));
-
-                settings.GeneratorSettings.DocumentProcessors.Add(
-                    new SecurityDefinitionAppender("custom-auth", new SwaggerSecurityScheme
-                    {
-                        Type = SwaggerSecuritySchemeType.ApiKey,
-                        Name = "CanAccess",
-                        Description = "CanAccess Header",
-                        In = SwaggerSecurityApiKeyLocation.Header
-                    }));
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Todo API V1");
             });
-        app.UseSwaggerUi(typeof(Startup).GetTypeInfo().Assembly, settings =>
-            {
-                
-                settings.PostProcess = document =>
-                {
-                    document.Info.Version = "v1";
-                    document.Info.Title = "ToDo API";
-                    document.Info.Description = "A simple ASP.NET Core web API";
-                    document.Info.TermsOfService = "None";
-
-                };
-            });
-
             app.UseMvc();
         }
     }
