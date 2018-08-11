@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using TodoApi.Models;
 
 namespace TodoApi
@@ -44,6 +42,15 @@ namespace TodoApi
             context.TodoItems.Add(new TodoItem { Name = "Feed the dog", DateDue = new DateTime(2019, 12, 30) });
             context.TodoItems.Add(new TodoItem { Name = "Walk the cat", DateDue = new DateTime(2019, 12, 29) });
             context.SaveChanges();
+        }
+
+        public static bool CanAccess(IHeaderDictionary headers)
+        {
+            if(headers.ContainsKey("CanAccess"))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
