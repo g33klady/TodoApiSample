@@ -6,6 +6,9 @@ using TodoApi.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
+using System.Reflection;
+using System.IO;
+using System;
 
 namespace TodoApi
 {
@@ -30,6 +33,9 @@ namespace TodoApi
                 {
                     { "CanAccess", new string[] {} }
                 });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
                 c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Todo API", Version = "v1" });
             });
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
