@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TodoApi.Models;
-using System.Reflection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
