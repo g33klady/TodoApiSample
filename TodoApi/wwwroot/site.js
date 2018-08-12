@@ -15,12 +15,6 @@ function getCount(data) {
 }
 
 $(document).ready(function () {
-    if (Cookies.get('CanAccess' === 'undefined')) {
-        // do your stuff
-
-        // set cookie now
-        Cookies.set('CanAccess', 'true', { expires: 7 });
-    }
     getData();
 });
 
