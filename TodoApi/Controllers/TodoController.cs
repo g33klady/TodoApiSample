@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TodoApi.Models;
@@ -8,6 +7,7 @@ namespace TodoApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class TodoController : ControllerBase
     {
         private readonly TodoContext _context;
@@ -28,7 +28,7 @@ namespace TodoApi.Controllers
         /// <response code="200">Returns a list of all TodoItems</response>
         /// <response code="401">If missing authorization header</response>
         [HttpGet]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(List<TodoItem>), 200)]
         [ProducesResponseType(401)]
         public ActionResult<List<TodoItem>> GetAll()
         {
@@ -60,7 +60,7 @@ namespace TodoApi.Controllers
         /// <response code="401">If missing authorization header</response>
         /// <response code="404">If TodoItem ID is not found</response>
         [HttpGet("{id}", Name = "GetTodo")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(TodoItem), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         public ActionResult<TodoItem> GetById(long id)
@@ -96,7 +96,7 @@ namespace TodoApi.Controllers
         /// <response code="400">If the item is not correctly formed</response>
         /// <response code="401">If missing authorization header</response>
         [HttpPost]
-        [ProducesResponseType(201)]
+        [ProducesResponseType(typeof(TodoItem), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         public IActionResult Create([FromBody]TodoItem item)

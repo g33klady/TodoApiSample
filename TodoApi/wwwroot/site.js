@@ -60,7 +60,7 @@ function addItem() {
         },
         data: JSON.stringify(item),
         error: function (jqXHR, textStatus, errorThrown) {
-            alert('here');
+            alert('Either name is missing or Date is invalid or not in the future');
         },
         success: function (result) {
             getData();
