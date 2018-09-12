@@ -13,7 +13,31 @@ This workshop requires the following:
 
 ## Resources
 Some resources mentioned or useful during the workshop:
-* Test cases defined in VSTS for the manual tests (https://g33kladyisme.visualstudio.com/TestingRESTServices/_testManagement)
 * Random string generator (https://goo.gl/sQ9Zej)
 * http://unicodesnowmanforyou.com/
 * Which Tests Should We Automate - Angie Jones (https://www.youtube.com/watch?v=VL-_pnICmGY)
+* Chrome Dev Tools Network Reference
+ (https://developers.google.com/web/tools/chrome-devtools/network-performance/reference)
+
+
+## To Use This Application In Docker
+The application can also be used in Docker, for instance for the Workshop "Have Some Cake With Your Frosting"
+* Install and setup Docker (https://www.docker.com/community-edition)
+* If using Docker on Windows, set Docker to use Linux Containers - either during installation or by right-clicking on the Docker icon in the system tray and choosing Switch to Linux Containers (you can switch back after the workshop)
+* Verify your installation (https://docs.docker.com/get-started/#test-docker-installation)
+* Run the following command from a command line anywhere on your computer
+`docker run -p 8080:80 --name myapp g33klady/todoapi:latest`
+This will get the latest docker image with this code running on your machine
+
+To see what is running in Docker
+`Docker ps`
+
+To stop a Docker image
+`Docker stop myapp`
+
+To start a Docker image back up
+`Docker start myapp`
+
+Once Docker is running, application can be accessed:
+http://localhost:8080
+
