@@ -18,6 +18,7 @@ Some resources mentioned or useful during the workshop:
 * Which Tests Should We Automate - Angie Jones (https://www.youtube.com/watch?v=VL-_pnICmGY)
 * Chrome Dev Tools Network Reference
  (https://developers.google.com/web/tools/chrome-devtools/network-performance/reference)
+* Danny Dainton's excellent Postman resources (https://github.com/DannyDainton/All-Things-Postman)
 
 
 ## To Use This Application In Docker
@@ -41,3 +42,5 @@ To start a Docker image back up
 Once Docker is running, application can be accessed:
 http://localhost:8080
 
+### Note
+You'll need to provide a header with key "CanAccess" and value "true" to use the API via Postman. When using the Swagger specification, select the Authorization button and enter the value "true".
