@@ -11,6 +11,14 @@ This workshop requires the following:
 * Postman (https://www.getpostman.com/apps)
 * Fork this repo & clone locally
 
+# Have Some Cake With Your Frosting: Testing The UI and API Layers
+## Prerequisites
+For this workshop, no prior knowledge is required. However, the following are required to be installed:
+* Docker (https://www.docker.com/community-edition)
+* Chrome
+* Postman (https://www.getpostman.com/apps)
+
+
 ## Resources
 Some resources mentioned or useful during the workshop:
 * Random string generator (https://goo.gl/sQ9Zej)
@@ -44,3 +52,7 @@ http://localhost:8080
 
 ### Note
 You'll need to provide a header with key "CanAccess" and value "true" to use the API via Postman. When using the Swagger specification, select the Authorization button and enter the value "true".
+
+## Automated Test Samples
+To view some automated tests written in C#, review the branch "Exercise 5".
+To view the above automated tests using RestSharp, review the branch "RestSharp".
