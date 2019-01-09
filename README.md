@@ -20,13 +20,15 @@ For this workshop, no prior knowledge is required. However, the following are re
 
 
 ## Resources
-Some resources mentioned or useful during the workshop:
+Some resources mentioned or useful during the workshops:
 * Random string generator (https://goo.gl/sQ9Zej)
 * http://unicodesnowmanforyou.com/
 * Which Tests Should We Automate - Angie Jones (https://www.youtube.com/watch?v=VL-_pnICmGY)
 * Chrome Dev Tools Network Reference
  (https://developers.google.com/web/tools/chrome-devtools/network-performance/reference)
 * Danny Dainton's excellent Postman resources (https://github.com/DannyDainton/All-Things-Postman)
+* Testing Heuristics Cheat Sheet (http://testobsessed.com/wp-content/uploads/2011/04/testheuristicscheatsheetv1.pdf)
+* Slides for the workshops are in the Resources folder of this repo
 
 
 ## To Use This Application In Docker
