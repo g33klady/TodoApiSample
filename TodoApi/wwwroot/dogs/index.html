@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>To-do List</title>
+
+    <style>
+        #showContainer {
+            /* Main wrapper for all images */
+            width: 670px;
+            padding: 0;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .navButton {
+            /* Make buttons look nice */
+            cursor: pointer;
+            float: left;
+            width: 25px;
+            height: 22px;
+            padding: 10px;
+            margin-right: 5px;
+            overflow: hidden;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            background: #000000;
+            opacity: 0.65;
+            user-select: none;
+        }
+
+            .navButton:hover {
+                opacity: 1;
+            }
+
+        .caption {
+            float: right;
+        }
+
+        .imageContainer:not(:first-child) {
+            /* Hide all images except the first */
+            display: none;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#previous').on('click', function () {
+                // Change to the previous image
+                $('#im_' + currentImage).stop().fadeOut(1);
+                decreaseImage();
+                $('#im_' + currentImage).stop().fadeIn(1);
+            });
+            $('#next').on('click', function () {
+                // Change to the next image
+                $('#im_' + currentImage).stop().fadeOut(1);
+                increaseImage();
+                $('#im_' + currentImage).stop().fadeIn(1);
+            });
+
+            var currentImage = 1;
+            var totalImages = 3;
+
+            function increaseImage() {
+                /* Increase currentImage by 1.
+                * Resets to 1 if larger than totalImages
+                */
+                ++currentImage;
+                if (currentImage > totalImages) {
+                    currentImage = 1;
+                }
+            }
+            function decreaseImage() {
+                /* Decrease currentImage by 1.
+                * Resets to totalImages if smaller than 1
+                */
+                --currentImage;
+                if (currentImage < 1) {
+                    currentImage = totalImages;
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+
+    <h1>Dogs!</h1>
+    <div id="showContainer">
+
+        <div class="imageContainer" id="im_1">
+            <img src="IMG_4241.JPG" width="500px" />
+            <div class="caption">
+                Cooper being amazing
+            </div>
+        </div>
+
+        <div class="imageContainer" id="im_2">
+            <img src="IMG_4242.JPG" width="500px"/>
+            <div class="caption">
+                Cooper is the best
+            </div>
+        </div>
+
+        <div class="imageContainer" id="im_3">
+            <img src="3.jpg" width="500px"/>
+            <div class="caption">
+                Cooper approves
+            </div>
+        </div>
+
+        <div class="navButton" id="prev">&#10094;</div>
+        <div class="navButton" id="next">&#10095;</div>
+        <br />
+        <div style="clear:both"><strong><a href="gallery.html">Gallery View</a></strong></div>
+    </div>
+</body>
+</html>
