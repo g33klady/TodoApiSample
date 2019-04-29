@@ -6,17 +6,6 @@ namespace TodoApiUnitTests
     [TestClass]
     public class UtilsUnitTests
     {
-
-        [TestMethod]
-        public void IsItemNameValidReturnsFalseWhenItemNameIsEmptyStringx()
-        {
-            TodoApi.Models.TodoItem item = new TodoApi.Models.TodoItem();
-            item.Name = "";
-
-            TodoApi.Utils.IsItemNameValid(item);
-
-        }
-
         [TestMethod]
         public void IsItemNameValidReturnsFalseWhenItemNameIsEmptyString()
         {
