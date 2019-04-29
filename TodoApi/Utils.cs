@@ -19,10 +19,6 @@ namespace TodoApi
         public static bool IsItemDateValid(TodoItem item)
         {
             var date = item.DateDue;
-            if (date == DateTime.MinValue)
-            {
-                return true;
-            }
             DateTime today = DateTime.Today;
             var diff = DateTime.Compare(date, today);
             if (diff < 0)
