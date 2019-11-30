@@ -76,12 +76,7 @@ namespace TodoApiTests
         public string PostTodoItemNameBoundaryTests(string name)
         {
             //Arrange
-            TodoItem postItem = new TodoItem
-            {
-                Name = name,
-                DateDue = new DateTime(2019, 12, 31)
-            };
-            var postRequest = Helpers.PostTodoItemRequest(postItem);
+            var postRequest = Helpers.PostTodoItemRequest(Helpers.GetTestTodoItem(name));
 
             //Act
             IRestResponse<TodoItem> response = _client.Execute<TodoItem>(postRequest);
