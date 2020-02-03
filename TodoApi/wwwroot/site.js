@@ -49,6 +49,7 @@ function addItem() {
         'isComplete': false,
         'dateDue': $('#add-date').val()
     };
+    item.name = escapeOutput(item.name);
 
     $.ajax({
         type: 'POST',
@@ -64,7 +65,7 @@ function addItem() {
         },
         success: function (result) {
             getData();
-            $('#add-name').val(''), $('#add-dateDue').val('');
+            item.name, $('#add-dateDue').val('');
         }
     });
 }
@@ -101,6 +102,7 @@ $('.my-form').on('submit', function () {
         'id': $('#edit-id').val(),
         'dateDue': $('#edit-date').val()
     };
+    item.name = escapeOutput(item.name);
 
     $.ajax({
         url: uri + '/' + $('#edit-id').val(),
@@ -122,4 +124,13 @@ $('.my-form').on('submit', function () {
 
 function closeInput() {
     $('#spoiler').css({ 'display': 'none' });
+}
+
+function escapeOutput(toOutput) {
+    return toOutput.replace(/\&/g, '&amp;')
+        .replace(/\</g, '&lt;')
+        .replace(/\>/g, '&gt;')
+        .replace(/\"/g, '&quot;')
+        .replace(/\'/g, '&#x27')
+        .replace(/\//g, '&#x2F');
 }
